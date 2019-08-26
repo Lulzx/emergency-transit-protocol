@@ -108,28 +108,27 @@ def reverse_geocode(location):
 def location_handler(update, context):
     chat_id = update.message.chat_id
     location = (float(update.message.location.latitude), float(update.message.location.longitude))
+    issue = context.user_data['type']
+    # closest = find_doctors(issue, location)
+    update.message.reply_text("Doctors have been informed.", reply_markup=telegram.ReplyKeyboardRemove())
+    x = reverse_geocode(location)
     try:
-        issue = context.user_data['type']
-        # closest = find_doctors(issue, location)
-        update.message.reply_text("Doctors have been informed.", reply_markup=telegram.ReplyKeyboardRemove())
-        x = reverse_geocode(location)
         name = x['features'][0]['properties']['name']
-        state = x['features'][0]['properties']['state']
-        postcode = x['features'][0]['properties']['postcode']
-        keyboard = [[InlineKeyboardButton("✅", callback_data=f'yeah;{chat_id}'),
+    except KeyError:
+        name = "{}, {}".format(float(update.message.location.latitude), float(update.message.location.longitude))
+    state = x['features'][0]['properties']['state']
+    postcode = x['features'][0]['properties']['postcode']
+    keyboard = [[InlineKeyboardButton("✅", callback_data=f'yeah;{chat_id}'),
                      InlineKeyboardButton("❌", callback_data='nope')]]
 
-        reply_markup = InlineKeyboardMarkup(keyboard)
-        context.bot.send_message(chat_id=LIST_OF_DOCTORS[2],
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    context.bot.send_message(chat_id=LIST_OF_DOCTORS[2],
+                                text=f"A patient at {name} in {state}, {postcode} of {issue} emergency.",
+                                  reply_markup=reply_markup)
+    context.bot.send_message(chat_id=LIST_OF_DOCTORS[3],
                                  text=f"A patient at {name} in {state}, {postcode} of {issue} emergency.",
                                  reply_markup=reply_markup)
-        context.bot.send_message(chat_id=LIST_OF_DOCTORS[3],
-                                 text=f"A patient at {name} in {state}, {postcode} of {issue} emergency.",
-                                 reply_markup=reply_markup)
-    except KeyError:
-        update.message.reply_text("Oops! You didn't specify the problem. Send /start to do so.")
-    finally:
-        context.user_data.clear()
+    context.user_data.clear()
 
 
 def help_handler(update, context):
