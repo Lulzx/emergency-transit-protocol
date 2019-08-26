@@ -12,7 +12,7 @@ import telegram
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler)
 
-LIST_OF_DOCTORS = [353341197, 777300358, 691609650, 951862290]
+LIST_OF_DOCTORS = [353341197, 777300358, 724115614, 691609650, 951862290]
 
 logging.basicConfig(format='%(message)s',
                     level=logging.INFO)
