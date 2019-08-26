@@ -123,6 +123,9 @@ def location_handler(update, context):
         context.bot.send_message(chat_id=LIST_OF_DOCTORS[2],
                                  text=f"A patient at {name} in {state}, {postcode} of {issue} emergency.",
                                  reply_markup=reply_markup)
+        context.bot.send_message(chat_id=LIST_OF_DOCTORS[3],
+                                 text=f"A patient at {name} in {state}, {postcode} of {issue} emergency.",
+                                 reply_markup=reply_markup)
     except KeyError:
         update.message.reply_text("Oops! You didn't specify the problem. Send /start to do so.")
     finally:
